@@ -1,6 +1,7 @@
 package AStar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -106,7 +107,7 @@ public class AstarAttempt2 {
 				p = new Pair((movementCost(curr, p.y) + distanceCost(p.y, finish)), p.y);
 			}
 			
-			nextChoices.sort(c);
+			Collections.sort(nextChoices);
 		}
 		
 		

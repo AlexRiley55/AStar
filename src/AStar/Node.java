@@ -3,7 +3,7 @@ package AStar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
 
 	public Vector3D location;
 	public ArrayList<Pair<Double,Node>> Edges;
@@ -56,10 +56,8 @@ public class Node implements Comparable {
 	  }
 	  
 
-	  @Override
-	  public int compareTo(Object o) {
-		  Node n = (Node) o;
-		  //TODO: do this
-		  return 0;
-	  }
+	@Override
+	public int compareTo(Node other) {
+        return this.Edges.size() - other.Edges.size();
+	}
 }

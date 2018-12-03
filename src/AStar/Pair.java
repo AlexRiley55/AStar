@@ -1,6 +1,6 @@
 package AStar;
 
-public class Pair<X, Y> implements Comparable { 
+public class Pair<X extends Comparable<X>, Y extends Comparable<Y>> implements Comparable<Pair<X, Y>> { 
 	  public final X x; 
 	  public final Y y; 
 	  public Pair(X x, Y y) { 
@@ -30,14 +30,11 @@ public class Pair<X, Y> implements Comparable {
 	  }
 	  
 	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		Pair<X,Y> p = (Pair<X,Y>) o;
-		
-		if(X.compareTo(p.x)) {
-			
-		}
-		return 0;
+	public int compareTo(Pair<X, Y> other) {
+		int res = this.x.compareTo(other.x);
+        if (res == 0)
+            res = this.y.compareTo(other.y);
+		return res;
 	}
 	  
-	} 
+} 
