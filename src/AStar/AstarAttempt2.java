@@ -17,10 +17,13 @@ public class AstarAttempt2 {
 	private final int v = 30;
 	private final int e = 15;
 	
+	List<Node> closedList = new ArrayList<Node>();
+    List<Pair<Double,Node>> openList = new ArrayList<Pair<Double,Node>>();
+	
 	Node[] graph;
 	
 	public static void main(String[] args) {
-		AStar3D AStar = new AStar3D();
+		AstarAttempt2 AStar = new AstarAttempt2();
 		AStar.aStarSearch(0, 29);
 	}
 	
@@ -95,8 +98,6 @@ public class AstarAttempt2 {
 			return;
 		}
 		
-		List<Node> closedList = new ArrayList<Node>();
-	    List<Node> openList = new ArrayList<Node>();
 	    Node curr = graph[s];
 	    Node finish = graph[f];
 	    List<Pair<Double,Node>> nextChoices;
@@ -104,14 +105,53 @@ public class AstarAttempt2 {
 		while(!noPath) {
 			nextChoices = (List<Pair<Double, Node>>) curr.Edges.clone();
 			for(Pair<Double,Node> p:nextChoices) {
-				p = new Pair((movementCost(curr, p.y) + distanceCost(p.y, finish)), p.y);
+				p = new Pair((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), p.getY());
+				addToOpenList(nextChoices); //TODO: have this add only those that are not already on the list
 			}
 			
+			Iterator<Pair<Double,Node>> it = openList.iterator();
+			
+			while(it.hasNext()) {
+				Pair<Double,Node> choice = it.next();
+				if(!closedList.contains(choice.getY())) {
+					curr = choice.getY();
+					closedList.add(curr);
+				}
+			}
+			
+			StdOut.println("before");
+			it = nextChoices.iterator();
+			Pair<Double,Node> first = it.next();
+			StdOut.println(first.getX());
 			Collections.sort(nextChoices);
+			StdOut.println("after");
+			it = nextChoices.iterator();
+			Pair<Double,Node> second = it.next();
+			StdOut.println(second.getX());
+			
+			noPath = true;//temp for testing
 		}
 		
-		
-		StdOut.println(openList);
+		for(Pair<Double,Node> p:openList) {
+			StdOut.println(p.getX());
+			StdOut.println(p.getY());
+		}
 	}
 	
+	private void addToOpenList(List<Pair<Double, Node>> newList) {
+		for(Pair<Double, Node> newPair:newList) {
+			for(Pair<Double, Node> openPair:openList) {
+				if(newPair.getY().equals(openPair.getY())) {
+					if(newPair.getX()< openPair.getX()) {
+						openPair.setX(newPair.getX());
+					}
+					continue;
+				}
+			}
+			
+			openList.add(newPair);
+		}
+		
+		Collections.sort(openList);
+	}
 }

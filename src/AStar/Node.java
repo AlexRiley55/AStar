@@ -15,7 +15,7 @@ public class Node implements Comparable<Node> {
 	
 	public void addEdge(Pair<Double,Node> p) {
 		Edges.add(p);
-		p.y.Edges.add(new Pair<Double,Node>(p.x, this));
+		p.getY().Edges.add(new Pair<Double,Node>(p.getX(), this));
 	}
 	
 	public void addEdge(Double cost, Node n) {
@@ -25,8 +25,8 @@ public class Node implements Comparable<Node> {
 	
 	public double conected(Node n) {
 		for(Pair<Double,Node> pair:Edges) {
-			if (n == pair.y) {
-				return pair.x;
+			if (n == pair.getY()) {
+				return pair.getX();
 			}
 		}
 		
@@ -37,7 +37,7 @@ public class Node implements Comparable<Node> {
 	  public int hashCode() {
 	      int hash = 7;
 	      hash = 31 * hash + location.hashCode();
-	      hash = 31 * hash + Edges.hashCode();
+	      //hash = 31 * hash + Edges.hashCode();
 	      return hash;
 	  }
 	  

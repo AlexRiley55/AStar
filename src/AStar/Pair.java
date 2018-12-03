@@ -1,8 +1,8 @@
 package AStar;
 
 public class Pair<X extends Comparable<X>, Y extends Comparable<Y>> implements Comparable<Pair<X, Y>> { 
-	  public final X x; 
-	  public final Y y; 
+	  private  X x; 
+	  private  Y y; 
 	  public Pair(X x, Y y) { 
 	    this.x = x; 
 	    this.y = y; 
@@ -12,7 +12,20 @@ public class Pair<X extends Comparable<X>, Y extends Comparable<Y>> implements C
 		    this.y = null; 
 	  }
 	  
-	  @Override
+	  public X getX() {
+		return x;
+	}
+	public void setX(X x) {
+		this.x = x;
+	}
+	public Y getY() {
+		return y;
+	}
+	public void setY(Y y) {
+		this.y = y;
+	}
+	
+	@Override
 	  public int hashCode() {
 	      int hash = 7;
 	      hash = 31 * hash + x.hashCode();
@@ -24,7 +37,7 @@ public class Pair<X extends Comparable<X>, Y extends Comparable<Y>> implements C
 	  public boolean equals(Object o) {
 		  if (o instanceof Pair) {
 			  Pair p = (Pair) o;
-		      if (this.hashCode() == p.hashCode()) return true;
+		      if (this.hashCode() == p.hashCode()) return true;//TODO: make this based on actual values of x and y. Check that X,Y are the same types as X,Y
 		    }
 		    return false;
 	  }
