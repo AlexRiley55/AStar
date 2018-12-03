@@ -140,16 +140,19 @@ public class AstarAttempt2 {
 	
 	private void addToOpenList(List<Pair<Double, Node>> newList) {
 		for(Pair<Double, Node> newPair:newList) {
+			boolean onList = false;
 			for(Pair<Double, Node> openPair:openList) {
 				if(newPair.getY().equals(openPair.getY())) {
+					onList = true;
 					if(newPair.getX()< openPair.getX()) {
 						openPair.setX(newPair.getX());
 					}
-					continue;
 				}
 			}
 			
-			openList.add(newPair);
+			if(!onList) {
+				openList.add(newPair);
+			}
 		}
 		
 		Collections.sort(openList);
