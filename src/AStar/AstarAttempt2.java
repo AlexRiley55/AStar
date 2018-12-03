@@ -15,7 +15,7 @@ public class AstarAttempt2 {
 	private final int maxCost = 1000;
 	
 	private final int v = 30;
-	private final int e = 15;
+	private final int e = 50;
 	
 	List<Node> closedList = new ArrayList<Node>();
     List<Pair<Double,Node>> openList = new ArrayList<Pair<Double,Node>>();
@@ -91,7 +91,7 @@ public class AstarAttempt2 {
 			//invalid start / end
 		}
 		
-		boolean noPath = false;
+		boolean noPath = false;//this is temp for testing
 		
 		if(s == f) {
 			//we are already at the finish!
@@ -99,8 +99,12 @@ public class AstarAttempt2 {
 		}
 		
 	    Node curr = graph[s];
+	    StdOut.println("Going from: " + curr.location);
 	    Node finish = graph[f];
+	    StdOut.println("To: " + finish.location);
 	    List<Pair<Double,Node>> nextChoices;
+	    
+	    int i = 0;
 	    
 		while(!noPath) {
 			nextChoices = (List<Pair<Double, Node>>) curr.Edges.clone();
@@ -111,6 +115,7 @@ public class AstarAttempt2 {
 			
 			Iterator<Pair<Double,Node>> it = openList.iterator();
 			
+			curr = null;
 			while(it.hasNext()) {
 				Pair<Double,Node> choice = it.next();
 				if(!closedList.contains(choice.getY())) {
@@ -118,24 +123,34 @@ public class AstarAttempt2 {
 					closedList.add(curr);
 				}
 			}
+			if(curr == null) {
+				//TODO: there is no path
+				noPath = true;//this is temp for testing
+			}
 			
-			StdOut.println("before");
-			it = nextChoices.iterator();
-			Pair<Double,Node> first = it.next();
-			StdOut.println(first.getX());
-			Collections.sort(nextChoices);
-			StdOut.println("after");
-			it = nextChoices.iterator();
-			Pair<Double,Node> second = it.next();
-			StdOut.println(second.getX());
+			StdOut.println(i);
+			StdOut.println(curr);
+			StdOut.println("Open List: " + openListToString());
 			
-			noPath = true;//temp for testing
+			if(graph[f].equals(curr)) {
+				//we finished
+				StdOut.println("Finished");
+				noPath = true;//this is temp for testing
+			}
+			
+			i++;
 		}
 		
+	}
+	
+	public String openListToString() {
+		String res = "";
+		
 		for(Pair<Double,Node> p:openList) {
-			StdOut.println(p.getX());
-			StdOut.println(p.getY());
+			res += p.getX() + " ";
+			res += p.getY() + " ";
 		}
+		return res;
 	}
 	
 	private void addToOpenList(List<Pair<Double, Node>> newList) {

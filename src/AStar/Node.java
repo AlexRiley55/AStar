@@ -52,7 +52,11 @@ public class Node implements Comparable<Node> {
 	  
 	  @Override
 	  public String toString() {
-		  return location.toString() + " " + Edges.toString();
+		  String res = location.toString() + " ";
+		  for(Pair<Double,Node> p:Edges) {
+			  res += "[ " + p.getX() + " " + p.getY().location.toString() + " ]";
+		  }
+		  return  res;
 	  }
 	  
 
