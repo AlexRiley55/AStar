@@ -25,10 +25,11 @@ public class Vector3D<T> {
 	      return hash;
 	  }
 	  
+	  @SuppressWarnings("unchecked") //I don't see a great way around just suppressing this here.
 	  @Override
 	  public boolean equals(Object o) { //TODO: make this templated
 		  if (o instanceof Vector3D) {
-			  Vector3D v = (Vector3D) o;
+			  Vector3D<T> v = (Vector3D<T>) o;//TODO: can this be done without the unsafe cast?
 		      if (this.hashCode() == v.hashCode()) return true;
 		    }
 		    return false;

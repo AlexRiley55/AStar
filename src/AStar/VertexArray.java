@@ -11,19 +11,21 @@ public class VertexArray {
 		Verts[index] = data;
 	}
 	
+	@SuppressWarnings("unchecked")//I don't see a great way around just suppressing this here.
 	public Vector3D<Double> getVerts(int index) {
-		return (Vector3D<Double>) Verts[index];
+		return (Vector3D<Double>) Verts[index]; //TODO: is there a way to do this without the unsafe cast
 	}
 
 	public VertexArray(int v) {
 		Verts = new Object[v];
 	}
 	
+	@SuppressWarnings("unchecked")//I don't see a great way around just suppressing this here.
 	@Override
 	public String toString() {//TODO: make toString for VertexArray
 		String result = "";
 		for(Object o:Verts) {
-			result += ((Vector3D<Double>) o).toString();
+			result += ((Vector3D<Double>) o).toString();//TODO: is there a way to do this without the unsafe cast
 		}
 		return result;
 	}

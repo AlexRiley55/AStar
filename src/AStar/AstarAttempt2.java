@@ -2,10 +2,8 @@ package AStar;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class AstarAttempt2 {
 	private final int minBounds = -10;
@@ -15,7 +13,7 @@ public class AstarAttempt2 {
 	private final int maxCost = 1000;
 	
 	private final int v = 30;
-	private final int e = 50;
+	private final int e = 60;
 	
 	List<Node> closedList = new ArrayList<Node>();
     List<Pair<Double,Node>> openList = new ArrayList<Pair<Double,Node>>();
@@ -36,7 +34,7 @@ public class AstarAttempt2 {
 			double y = (double) StdRandom.uniform(minBounds, maxBounds);
 			double z = (double) StdRandom.uniform(minBounds, maxBounds);
 			
-			Node n = new Node(new Vector3D(x,y,z), new ArrayList<Pair<Double,Node>>());
+			Node n = new Node(new Vector3D<Double>(x,y,z), new ArrayList<Pair<Double,Node>>());
 			graph[i] = n;
 		}
 				
@@ -88,7 +86,7 @@ public class AstarAttempt2 {
 	void aStarSearch(int s, int f) {//s,f = start, finish indexes
 		
 		if(s > graph.length || f > graph.length) {
-			//invalid start / end
+			//TODO: invalid start / end
 		}
 		
 		boolean noPath = false;//this is temp for testing
@@ -107,9 +105,15 @@ public class AstarAttempt2 {
 	    int i = 0;
 	    
 		while(!noPath) {
-			nextChoices = (List<Pair<Double, Node>>) curr.Edges.clone();
+			if((curr.Edges instanceof List)) {
+				nextChoices = curr.Edges;
+			} else {
+				//TODO: throw error
+				nextChoices = null;//temp
+			}
+			
 			for(Pair<Double,Node> p:nextChoices) {
-				p = new Pair((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), p.getY());
+				p = new Pair<Double, Node>((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), p.getY());
 				addToOpenList(nextChoices); //TODO: have this add only those that are not already on the list
 			}
 			
