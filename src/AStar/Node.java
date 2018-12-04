@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node> {
 
-	public Vector3D<Double> location;
+	public Vector3D<Double, Double, Double> location;
 	public ArrayList<Pair<Double,Node>> Edges;
+	public Node Parent;
 	
-	Node(Vector3D<Double> loc, ArrayList<Pair<Double,Node>> e){
+	Node(Vector3D<Double, Double, Double> loc, ArrayList<Pair<Double,Node>> e){
 		location = loc;
 		Edges = e;
+		Parent = null;
 	}
 	
 	public void addEdge(Pair<Double,Node> p) {

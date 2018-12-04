@@ -35,7 +35,7 @@ public class AStar3D {
 			double y = (double) StdRandom.uniform(minBounds, maxBounds);
 			double z = (double) StdRandom.uniform(minBounds, maxBounds);
 			
-			Verts.setVerts(i,new Vector3D<Double>(x, y, z));
+			Verts.setVerts(i,new Vector3D<Double, Double, Double>(x, y, z));
 		}
 		
 		StdOut.println(Verts);

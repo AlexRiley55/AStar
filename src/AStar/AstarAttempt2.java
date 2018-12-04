@@ -16,7 +16,7 @@ public class AstarAttempt2 {
 	private final int e = 60;
 	
 	List<Node> closedList = new ArrayList<Node>();
-    List<Pair<Double,Node>> openList = new ArrayList<Pair<Double,Node>>();
+    List<Vector3D<Double,Node, Node>> openList = new ArrayList<Vector3D<Double,Node, Node>>();
 	
 	Node[] graph;
 	
@@ -34,7 +34,7 @@ public class AstarAttempt2 {
 			double y = (double) StdRandom.uniform(minBounds, maxBounds);
 			double z = (double) StdRandom.uniform(minBounds, maxBounds);
 			
-			Node n = new Node(new Vector3D<Double>(x,y,z), new ArrayList<Pair<Double,Node>>());
+			Node n = new Node(new Vector3D<Double, Double, Double>(x,y,z), new ArrayList<Pair<Double,Node>>());
 			graph[i] = n;
 		}
 				
@@ -100,31 +100,39 @@ public class AstarAttempt2 {
 	    StdOut.println("Going from: " + curr.location);
 	    Node finish = graph[f];
 	    StdOut.println("To: " + finish.location);
-	    List<Pair<Double,Node>> nextChoices;
+	    List<Vector3D<Double, Node, Node>> nextChoices = new  ArrayList<Vector3D<Double, Node, Node>>();
 	    
 	    int i = 0;
 	    
 		while(!noPath) {
-			if((curr.Edges instanceof List)) {
-				nextChoices = curr.Edges;
-			} else {
+			if(!(curr.Edges instanceof List)) {
 				//TODO: throw error
 				nextChoices = null;//temp
+				StdOut.println("Edges is not a list");
 			}
 			
-			for(Pair<Double,Node> p:nextChoices) {
-				p = new Pair<Double, Node>((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), p.getY());
-				addToOpenList(nextChoices); //TODO: have this add only those that are not already on the list
+			for(Pair<Double, Node> p:curr.Edges) {
+				Vector3D<Double, Node, Node> v = new Vector3D<Double, Node, Node>((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), curr, p.getY());
+				nextChoices.add(v);
 			}
+			addToOpenList(nextChoices);
 			
-			Iterator<Pair<Double,Node>> it = openList.iterator();
+			StdOut.println(i);
+			StdOut.println(curr);
+			StdOut.println("Open List: " + openListToString());
+			
+			Iterator<Vector3D<Double,Node, Node>> it = openList.iterator();
 			
 			curr = null;
 			while(it.hasNext()) {
-				Pair<Double,Node> choice = it.next();
-				if(!closedList.contains(choice.getY())) {
-					curr = choice.getY();
+				Vector3D<Double,Node, Node> choice = it.next();
+				if(!(closedList.contains(choice.z))) {
+					Node parent = choice.y;
+					StdOut.println("parent: " + parent.location);
+					curr = choice.z;
+					curr.Parent = parent;
 					closedList.add(curr);
+					break;
 				}
 			}
 			if(curr == null) {
@@ -132,9 +140,7 @@ public class AstarAttempt2 {
 				noPath = true;//this is temp for testing
 			}
 			
-			StdOut.println(i);
-			StdOut.println(curr);
-			StdOut.println("Open List: " + openListToString());
+			
 			
 			if(graph[f].equals(curr)) {
 				//we finished
@@ -145,32 +151,47 @@ public class AstarAttempt2 {
 			i++;
 		}
 		
+		List<Node> path = ListPath(curr);
+		Collections.reverse(path);
+		StdOut.println(path);
+	}
+	
+	public ArrayList<Node> ListPath(Node end) {
+		Node next = end;
+		ArrayList<Node> results = new ArrayList<Node>();
+		while(next != null) {
+			results.add(next);
+			next = next.Parent;
+		}
+		
+		return results;
 	}
 	
 	public String openListToString() {
 		String res = "";
 		
-		for(Pair<Double,Node> p:openList) {
-			res += p.getX() + " ";
-			res += p.getY() + " ";
+		for(Vector3D<Double,Node, Node> p:openList) {
+			res += p.x + " ";
+			res += p.y + " ";
 		}
 		return res;
 	}
 	
-	private void addToOpenList(List<Pair<Double, Node>> newList) {
-		for(Pair<Double, Node> newPair:newList) {
+	private void addToOpenList(List<Vector3D<Double,Node, Node>> newList) {
+		for(Vector3D<Double,Node, Node> newVec:newList) {
 			boolean onList = false;
-			for(Pair<Double, Node> openPair:openList) {
-				if(newPair.getY().equals(openPair.getY())) {
+			for(Vector3D<Double,Node, Node> openVec:openList) {
+				if(newVec.z.equals(openVec.z)) {
 					onList = true;
-					if(newPair.getX()< openPair.getX()) {
-						openPair.setX(newPair.getX());
+					if(newVec.x< openVec.x) {
+						openVec.x = newVec.x;
+						openVec.y = newVec.y;
 					}
 				}
 			}
 			
 			if(!onList) {
-				openList.add(newPair);
+				openList.add(newVec);
 			}
 		}
 		
