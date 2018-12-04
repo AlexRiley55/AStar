@@ -17,7 +17,7 @@ public class AstarAttempt2 {
 	
 	List<Node> closedList = new ArrayList<Node>();
     List<Vector3D<Double,Node, Node>> openList = new ArrayList<Vector3D<Double,Node, Node>>();
-	
+    
 	Node[] graph;
 	
 	public static void main(String[] args) {
@@ -53,6 +53,7 @@ public class AstarAttempt2 {
 				graph[i].addEdge(cost, graph[index]);
 			}
 		}
+		
 	}
 	
 	public boolean isConnected(Node a, Node b){
@@ -112,7 +113,8 @@ public class AstarAttempt2 {
 			}
 			
 			for(Pair<Double, Node> p:curr.Edges) {
-				Vector3D<Double, Node, Node> v = new Vector3D<Double, Node, Node>((movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), curr, p.getY());
+				Vector3D<Double, Node, Node> v = new Vector3D<Double, Node, Node>((curr.tempMoveCost + movementCost(curr, p.getY()) + distanceCost(p.getY(), finish)), curr, p.getY());
+				v.z.tempMoveCost = curr.tempMoveCost + movementCost(curr, p.getY());
 				nextChoices.add(v);
 			}
 			addToOpenList(nextChoices);
@@ -120,6 +122,8 @@ public class AstarAttempt2 {
 			StdOut.println(i);
 			StdOut.println(curr);
 			StdOut.println("Open List: " + openListToString());
+			if(curr.Parent != null)
+				StdOut.println("parent: " + curr.Parent.location);
 			
 			Iterator<Vector3D<Double,Node, Node>> it = openList.iterator();
 			
@@ -128,16 +132,17 @@ public class AstarAttempt2 {
 				Vector3D<Double,Node, Node> choice = it.next();
 				if(!(closedList.contains(choice.z))) {
 					Node parent = choice.y;
-					StdOut.println("parent: " + parent.location);
 					curr = choice.z;
 					curr.Parent = parent;
 					closedList.add(curr);
+					openList.remove(choice);
 					break;
 				}
 			}
 			if(curr == null) {
 				//TODO: there is no path
 				noPath = true;//this is temp for testing
+				StdOut.println("No Path");
 			}
 			
 			
@@ -149,11 +154,22 @@ public class AstarAttempt2 {
 			}
 			
 			i++;
+			//List<Node> path = ListPath(curr);
+			//Collections.reverse(path); 
+			//String results = " ";
+			//for(Node n:path) {
+			//	results += n.location;
+			//}
+			//StdOut.println(results);
 		}
 		
-		List<Node> path = ListPath(curr);
-		Collections.reverse(path);
-		StdOut.println(path);
+		//List<Node> path = ListPath(curr);
+		//Collections.reverse(path); 
+		//String results = " ";
+		//for(Node n:path) {
+		//	results += n.location;
+		//}
+		//StdOut.println(results);
 	}
 	
 	public ArrayList<Node> ListPath(Node end) {
@@ -172,7 +188,7 @@ public class AstarAttempt2 {
 		
 		for(Vector3D<Double,Node, Node> p:openList) {
 			res += p.x + " ";
-			res += p.y + " ";
+			res += p.z + " ";
 		}
 		return res;
 	}

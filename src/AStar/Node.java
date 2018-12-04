@@ -7,6 +7,7 @@ public class Node implements Comparable<Node> {
 	public Vector3D<Double, Double, Double> location;
 	public ArrayList<Pair<Double,Node>> Edges;
 	public Node Parent;
+	public double tempMoveCost = 0;
 	
 	Node(Vector3D<Double, Double, Double> loc, ArrayList<Pair<Double,Node>> e){
 		location = loc;
