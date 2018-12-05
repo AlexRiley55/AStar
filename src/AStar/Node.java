@@ -1,16 +1,18 @@
 package AStar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Node implements Comparable<Node> {
 
-	public Vector3D location;
+	public Vector3D<Double, Double, Double> location;
 	public ArrayList<Pair<Double,Node>> Edges;
+	public Node Parent;
+	public double tempMoveCost = 0;
 	
-	Node(Vector3D loc, ArrayList<Pair<Double,Node>> e){
+	Node(Vector3D<Double, Double, Double> loc, ArrayList<Pair<Double,Node>> e){
 		location = loc;
 		Edges = e;
+		Parent = null;
 	}
 	
 	public void addEdge(Pair<Double,Node> p) {

@@ -33,10 +33,11 @@ public class Pair<X extends Comparable<X>, Y extends Comparable<Y>> implements C
 	      return hash;
 	  }
 	  
+	@SuppressWarnings("unchecked") //I don't see a great way around just suppressing this here.
 	  @Override
 	  public boolean equals(Object o) {
 		  if (o instanceof Pair) {
-			  Pair p = (Pair) o;
+			  Pair<X, Y> p = (Pair<X, Y>) o;//TODO: can this be done without the unsafe cast?
 		      if (this.hashCode() == p.hashCode()) return true;//TODO: make this based on actual values of x and y. Check that X,Y are the same types as X,Y
 		    }
 		    return false;
